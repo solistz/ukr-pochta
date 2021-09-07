@@ -1,4 +1,5 @@
 import requests
+import exp_tab
 
 def region():
 
@@ -104,3 +105,4 @@ if __name__ == '__main__':
     print(street_id)
     post_code = street(street_id)
     print(post_code)
+    exp_tab
