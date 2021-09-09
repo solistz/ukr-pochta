@@ -87,16 +87,15 @@ def address(region_id,city_id,district_id,street_ua,shortstreettype_ua):
     for a,b in zm.items():
         for c,d in b.items():
             for i in d:
-                a = 0
-                a += 1
                 for e,f in i.items():
                     if e == 'SHORTSTREETTYPE_UA' and f == shortstreettype_ua :
-                        print(e,f)
-                        # print(a)
-                print(a)
-                        # if e == 'STREET_ID':
-                        #     # print(f)
-                        #     street_id = f
+                        print(i)
+                        for g, h in i.items():
+                            if g == 'STREET_ID':
+                                print(h)
+                                street_id = h
+    return (street_id)
+
 
 def postcode(street_id, housenumber):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
@@ -104,7 +103,7 @@ def postcode(street_id, housenumber):
     headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
     params_vi = (
         ('street_id', str(street_id)),
-        ('housenumber', '57')
+        ('housenumber', housenumber)
     )
     resp = requests.get(https + https_get, headers=headers, params=params_vi)
     print(resp.status_code)
@@ -132,10 +131,10 @@ def main():
     # reg_district_ua = "Кам'янець-Подільський"
     # reg_district_ua = "Шепетівський"
     reg_city_ua = 'хмель'
-    street_ua = 'кошар'
-    shortstreettype_ua = 'вул.'
-    # shortstreettype_ua = 'про'
-    housenumber = 57
+    street_ua = 'іпод'
+    # shortstreettype_ua = 'вул.'
+    shortstreettype_ua = 'пров.'
+    housenumber = 2
 
     region_id=region_ua(reg_ua)
     print(region_id)
@@ -147,10 +146,10 @@ def main():
     print(city_id)
 
     street_id = address(region_id, city_id, district_id, street_ua, shortstreettype_ua)
-    # print(street_id)
+    print(street_id)
 
-    # post_code = postcode(street_id, housenumber)
-    # print(post_code)
+    post_code = postcode(street_id, housenumber)
+    print(post_code)
 
 if __name__ == "__main__":
     main()
