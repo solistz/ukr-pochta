@@ -22,7 +22,6 @@ def region_ua(reg_ua):
                     if e == 'REGION_ID':
                         region_id = f
     return (region_id)
-#===============================================================
 def region_id_code(reg_id,reg_district_ua):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     https_get = "/get_districts_by_region_id_and_district_ua"
@@ -43,10 +42,6 @@ def region_id_code(reg_id,reg_district_ua):
                     if e == 'DISTRICT_ID':
                         district_id = f
     return (district_id)
-
-
-
-#
 def city_ua(reg_id_cod,reg_city_ua):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     https_get = "get_city_by_region_id_and_district_id_and_city_ua"
@@ -67,7 +62,6 @@ def city_ua(reg_id_cod,reg_city_ua):
                     if e == 'CITY_ID':
                         city_id = f
     return (city_id)
-
 def address(region_id,city_id,district_id,street_ua,shortstreettype_ua):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     https_get = "get_street_by_region_id_and_district_id_and_city_id_and_street_ua"
@@ -95,8 +89,6 @@ def address(region_id,city_id,district_id,street_ua,shortstreettype_ua):
                                 print(h)
                                 street_id = h
     return (street_id)
-
-
 def postcode(street_id, housenumber):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     https_get = "get_addr_house_by_street_id"
@@ -123,9 +115,6 @@ def postcode(street_id, housenumber):
 
 
 def main():
-# 'DISTRICT_UA': "Кам'янець-Подільський", 'DISTRICT_ID': '894',
-# 'DISTRICT_UA': 'Хмельницький', 'DISTRICT_ID': '1009',
-# 'DISTRICT_UA': 'Шепетівський', 'DISTRICT_ID': '1010',
     reg_ua = 'хм'
     reg_district_ua = "Хмельницький"
     # reg_district_ua = "Кам'янець-Подільський"
@@ -135,22 +124,18 @@ def main():
     # shortstreettype_ua = 'вул.'
     shortstreettype_ua = 'пров.'
     housenumber = 2
-
+"""
     region_id=region_ua(reg_ua)
     print(region_id)
-
     district_id=region_id_code(region_id,reg_district_ua)
     print(district_id)
-
     city_id = city_ua(district_id,reg_city_ua)
     print(city_id)
-
     street_id = address(region_id, city_id, district_id, street_ua, shortstreettype_ua)
     print(street_id)
-
     post_code = postcode(street_id, housenumber)
     print(post_code)
-
+"""
 if __name__ == "__main__":
     main()
 
