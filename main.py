@@ -68,7 +68,7 @@ def city_ua(reg_id_cod,reg_city_ua):
                         city_id = f
     return (city_id)
 
-def address(region_id,city_id,district_id):
+def address(region_id,city_id,district_id,street_ua,shortstreettype_ua):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     https_get = "get_street_by_region_id_and_district_id_and_city_id_and_street_ua"
     headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
@@ -76,7 +76,35 @@ def address(region_id,city_id,district_id):
         ('district_id', district_id),
         ('region_id', region_id),
         ('city_id', str(city_id)),
-        ('street_ua', 'міч'),
+        ('street_ua', street_ua),
+    )
+    resp = requests.get(https + https_get, headers=headers, params=params_vi)
+    print(resp.status_code)
+    print(resp.json())
+    zm = resp.json()
+    print(resp.url)
+    print(zm)
+    for a,b in zm.items():
+        for c,d in b.items():
+            for i in d:
+                a = 0
+                a += 1
+                for e,f in i.items():
+                    if e == 'SHORTSTREETTYPE_UA' and f == shortstreettype_ua :
+                        print(e,f)
+                        # print(a)
+                print(a)
+                        # if e == 'STREET_ID':
+                        #     # print(f)
+                        #     street_id = f
+
+def postcode(street_id, housenumber):
+    https = "https://www.ukrposhta.ua/address-classifier-ws/"
+    https_get = "get_addr_house_by_street_id"
+    headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
+    params_vi = (
+        ('street_id', str(street_id)),
+        ('housenumber', '57')
     )
     resp = requests.get(https + https_get, headers=headers, params=params_vi)
     print(resp.status_code)
@@ -88,33 +116,10 @@ def address(region_id,city_id,district_id):
         for c,d in b.items():
             for i in d:
                 for e,f in i.items():
-                    if e == 'STREET_ID':
+                    if e == 'POSTCODE':
                         print(f)
-                        street_id = f
-    return (street_id)
-#
-# def street(street_id):
-#     https = "https://www.ukrposhta.ua/address-classifier-ws/"
-#     https_get = "get_addr_house_by_street_id"
-#     headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
-#     params_vi = (
-#         ('street_id', str(street_id)),
-#         # ('housenumber', '27')
-#     )
-#     resp = requests.get(https + https_get, headers=headers, params=params_vi)
-#     print(resp.status_code)
-#     print(resp.json())
-#     zm = resp.json()
-#     print(resp.url)
-#     print(zm)
-#     for a,b in zm.items():
-#         for c,d in b.items():
-#             for i in d:
-#                 for e,f in i.items():
-#                     if e == 'POSTCODE':
-#                         print(f)
-#                         post_code = f
-#     return (post_code)
+                        post_code = f
+    return (post_code)
 
 
 
@@ -128,6 +133,9 @@ def main():
     # reg_district_ua = "Шепетівський"
     reg_city_ua = 'хмель'
     street_ua = 'кошар'
+    shortstreettype_ua = 'вул.'
+    # shortstreettype_ua = 'про'
+    housenumber = 57
 
     region_id=region_ua(reg_ua)
     print(region_id)
@@ -138,10 +146,12 @@ def main():
     city_id = city_ua(district_id,reg_city_ua)
     print(city_id)
 
-    street_id = address(region_id, city_id, district_id, street_ua)
-    print(street_id)
+    street_id = address(region_id, city_id, district_id, street_ua, shortstreettype_ua)
+    # print(street_id)
 
-    post_code = street(street_ua, city_id, district_id)
-    print(post_code)
+    # post_code = postcode(street_id, housenumber)
+    # print(post_code)
+
 if __name__ == "__main__":
     main()
+
