@@ -26,7 +26,7 @@ def region_ua(reg_ua):
 
 def region_id_code(reg_id,reg_district_ua):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
-    https_get = "/get_districts_by_region_id_and_district_ua"
+    https_get = "get_districts_by_region_id_and_district_ua"
     headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
     params_vi = (
         ('region_id', reg_id),
