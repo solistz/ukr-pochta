@@ -10,6 +10,8 @@ class Index():
         "get_street_by_region_id_and_district_id_and_city_id_and_street_ua",
         "get_addr_house_by_street_id",
     ]
+
+
     search_api = [
         'REGION_ID',
         'DISTRICT_ID',
@@ -17,6 +19,16 @@ class Index():
         'STREET_ID',
         'POSTCODE',
     ]
+
+
+    # search_api = [
+    #     {region_id: 'REGION_ID'},
+    #     {district_id: 'DISTRICT_ID'},
+    #     {city_id: 'CITY_ID'},
+    #     {street_id: 'STREET_ID'},
+    #     {post_code: 'POSTCODE'},
+    # ]
+
 
     def __init__(self, region_ua, district_ua, city_ua, street_ua, shortstreettype_ua, housenumber):
         self.region_ua = region_ua
@@ -26,19 +38,19 @@ class Index():
         self.shortstreettype_ua = shortstreettype_ua
         self.housenumber = housenumber
 
-    def params_def(self,numb):
+    def params_def(self,iter):
         params_api = [
             (('region_name', self.region_ua),),
-            # (('region_id', region_id), ('district_ua', reg_district_ua),),
-            # (('district_id', reg_id_cod), ('city_ua', reg_city_ua),),
-            # (('district_id', district_id), ('region_id', region_id), ('city_id', str(city_id)),('street_ua', street_ua),),
-            # (('street_id', street_id), ('housenumber', housenumber))
+            (('region_id', region_id), ('district_ua', reg_district_ua),),
+            (('district_id', reg_id_cod), ('city_ua', reg_city_ua),),
+            (('district_id', district_id), ('region_id', region_id), ('city_id', str(city_id)),('street_ua', street_ua),),
+            (('street_id', street_id), ('housenumber', housenumber))
         ]
-        return params_api[numb]
+        return params_api[iter]
 
     def requests_create(self):
-        # for i in range(len(self.https_get_api)):
-            respomse_api = requests.get(self.https + self.https_get_api[0], headers=self.headers, params=self.params_def())
+        for i in range(len(self.https_get_api)):
+            respomse_api = requests.get(self.https + self.https_get_api[i], headers=self.headers, params=self.params_def(i))
             print(respomse_api.json())
             zm = respomse_api.json()
 
@@ -50,15 +62,14 @@ class Index():
                     for e, f in i.items():
                         if e == zm2:
                             z = f
-                            print('oooPs!',z)
+                            print(z)
         return (z)
 
     def ukr_pochta_api(self):
-        respomse_api = requests.get(self.https + self.https_get_api[0], headers=self.headers, params=self.params_def(0))
+        respomse_api = requests.get(self.https + self.https_get, headers=self.headers, params=self.params_region_name())
         print(respomse_api.json())
         zm = respomse_api.json()
-        return self.dvizok(zm,'REGION_ID',)
-
+        self.dvizok(zm,self.region_id,)
 
 
 
