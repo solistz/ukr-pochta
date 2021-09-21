@@ -93,7 +93,7 @@ def address(region_id,city_id,district_id,street_ua,shortstreettype_ua):
                         print(i)
                         for g, h in i.items():
                             if g == 'STREET_ID':
-                                print(h)
+                                # print(h)
                                 street_id = h
     return (street_id)
 
@@ -117,7 +117,7 @@ def postcode(street_id, housenumber):
             for i in d:
                 for e,f in i.items():
                     if e == 'POSTCODE':
-                        print(f)
+                        # print(f)
                         post_code = f
     return (post_code)
 
