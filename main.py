@@ -1,85 +1,156 @@
 import requests
+# import exp_tab
 
-class Index():
+def region_ua(reg_ua):
+
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
+    https_get = "get_regions_by_region_ua"
     headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
-    https_get_api = [
-        "get_regions_by_region_ua",
-        "get_districts_by_region_id_and_district_ua",
-        "get_city_by_region_id_and_district_id_and_city_ua",
-        "get_street_by_region_id_and_district_id_and_city_id_and_street_ua",
-        "get_addr_house_by_street_id",
-    ]
+    params_vi = (
+        ('region_name', reg_ua),
+        # ('region_name_en', 'Vol'),
+    )
+    resp = requests.get(https + https_get, headers=headers, params=params_vi)
+    print(resp.status_code)
+    print(resp.json())
+    zm = resp.json()
+    print(resp.url)
+    for a,b in zm.items():
+        for c,d in b.items():
+            for i in d:
+                for e,f in i.items():
+                    if e == 'REGION_ID':
+                        region_id = f
+    return (region_id)
 
 
-    search_api = [
-        'REGION_ID',
-        'DISTRICT_ID',
-        'CITY_ID',
-        'STREET_ID',
-        'POSTCODE',
-    ]
+def region_id_code(reg_id,reg_district_ua):
+    https = "https://www.ukrposhta.ua/address-classifier-ws/"
+    https_get = "get_districts_by_region_id_and_district_ua"
+    headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
+    params_vi = (
+        ('region_id', reg_id),
+        ('district_ua', reg_district_ua),
+    )
+    resp = requests.get(https + https_get, headers=headers, params=params_vi)
+    print(resp.status_code)
+    print(resp.json())
+    zm = resp.json()
+    print(resp.url)
+    for a,b in zm.items():
+        for c,d in b.items():
+            for i in d:
+                for e,f in i.items():
+                    if e == 'DISTRICT_ID':
+                        district_id = f
+    return (district_id)
 
 
-    # search_api = [
-    #     {region_id: 'REGION_ID'},
-    #     {district_id: 'DISTRICT_ID'},
-    #     {city_id: 'CITY_ID'},
-    #     {street_id: 'STREET_ID'},
-    #     {post_code: 'POSTCODE'},
-    # ]
+
+#
+def city_ua(reg_id_cod,reg_city_ua):
+    https = "https://www.ukrposhta.ua/address-classifier-ws/"
+    https_get = "get_city_by_region_id_and_district_id_and_city_ua"
+    headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
+    params_vi = (
+        ('district_id', reg_id_cod),
+        ('city_ua', reg_city_ua),
+    )
+    resp = requests.get(https + https_get, headers=headers, params=params_vi)
+    print(resp.status_code)
+    print(resp.json())
+    zm = resp.json()
+    print(resp.url)
+    for a,b in zm.items():
+        for c,d in b.items():
+            for i in d:
+                for e,f in i.items():
+                    if e == 'CITY_ID':
+                        city_id = f
+    return (city_id)
+
+def address(region_id,city_id,district_id,street_ua,shortstreettype_ua):
+    https = "https://www.ukrposhta.ua/address-classifier-ws/"
+    https_get = "get_street_by_region_id_and_district_id_and_city_id_and_street_ua"
+    headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
+    params_vi = (
+        ('district_id', district_id),
+        ('region_id', region_id),
+        ('city_id', str(city_id)),
+        ('street_ua', street_ua),
+    )
+    resp = requests.get(https + https_get, headers=headers, params=params_vi)
+    print(resp.status_code)
+    print(resp.json())
+    zm = resp.json()
+    print(resp.url)
+    print(zm)
+    for a,b in zm.items():
+        for c,d in b.items():
+            for i in d:
+                for e,f in i.items():
+                    if e == 'SHORTSTREETTYPE_UA' and f == shortstreettype_ua :
+                        print(i)
+                        for g, h in i.items():
+                            if g == 'STREET_ID':
+                                print(h)
+                                street_id = h
+    return (street_id)
 
 
-    def __init__(self, region_ua, district_ua, city_ua, street_ua, shortstreettype_ua, housenumber):
-        self.region_ua = region_ua
-        self.district_ua = district_ua
-        self.city_ua = city_ua
-        self.street_ua = street_ua
-        self.shortstreettype_ua = shortstreettype_ua
-        self.housenumber = housenumber
-
-    def params_def(self,iter):
-        params_api = [
-            (('region_name', self.region_ua),),
-            (('region_id', region_id), ('district_ua', reg_district_ua),),
-            (('district_id', reg_id_cod), ('city_ua', reg_city_ua),),
-            (('district_id', district_id), ('region_id', region_id), ('city_id', str(city_id)),('street_ua', street_ua),),
-            (('street_id', street_id), ('housenumber', housenumber))
-        ]
-        return params_api[iter]
-
-    def requests_create(self):
-        for i in range(len(self.https_get_api)):
-            respomse_api = requests.get(self.https + self.https_get_api[i], headers=self.headers, params=self.params_def(i))
-            print(respomse_api.json())
-            zm = respomse_api.json()
-
-
-    def dvizok(self, zm1, zm2):
-        for a, b in zm1.items():
-            for c, d in b.items():
-                for i in d:
-                    for e, f in i.items():
-                        if e == zm2:
-                            z = f
-                            print(z)
-        return (z)
-
-    def ukr_pochta_api(self):
-        respomse_api = requests.get(self.https + self.https_get, headers=self.headers, params=self.params_region_name())
-        print(respomse_api.json())
-        zm = respomse_api.json()
-        self.dvizok(zm,self.region_id,)
-
+def postcode(street_id, housenumber):
+    https = "https://www.ukrposhta.ua/address-classifier-ws/"
+    https_get = "get_addr_house_by_street_id"
+    headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
+    params_vi = (
+        ('street_id', str(street_id)),
+        ('housenumber', housenumber)
+    )
+    resp = requests.get(https + https_get, headers=headers, params=params_vi)
+    print(resp.status_code)
+    print(resp.json())
+    zm = resp.json()
+    print(resp.url)
+    print(zm)
+    for a,b in zm.items():
+        for c,d in b.items():
+            for i in d:
+                for e,f in i.items():
+                    if e == 'POSTCODE':
+                        print(f)
+                        post_code = f
+    return (post_code)
 
 
 
 def main():
+# 'DISTRICT_UA': "Кам'янець-Подільський", 'DISTRICT_ID': '894',
+# 'DISTRICT_UA': 'Хмельницький', 'DISTRICT_ID': '1009',
+# 'DISTRICT_UA': 'Шепетівський', 'DISTRICT_ID': '1010',
+    reg_ua = 'хм'
+    reg_district_ua = "Хмельницький"
+    # reg_district_ua = "Кам'янець-Подільський"
+    # reg_district_ua = "Шепетівський"
+    reg_city_ua = 'хмель'
+    street_ua = 'іпод'
+    # shortstreettype_ua = 'вул.'
+    shortstreettype_ua = 'пров.'
+    housenumber = 2
 
-    test = Index('хм', 'хм', 'хм', 'іпод', 'пров.', 2)
-    a = test.ukr_pochta_api()
-    print(a)
+    region_id=region_ua(reg_ua)
+    print(region_id)
 
+    district_id=region_id_code(region_id,reg_district_ua)
+    print(district_id)
+
+    city_id = city_ua(district_id,reg_city_ua)
+    print(city_id)
+
+    street_id = address(region_id, city_id, district_id, street_ua, shortstreettype_ua)
+    print(street_id)
+
+    post_code = postcode(street_id, housenumber)
+    print(post_code)
 
 if __name__ == "__main__":
     main()
