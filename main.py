@@ -89,7 +89,7 @@ def street(street_id):
             for i in d:
                 for e,f in i.items():
                     if e == 'POSTCODE':
-                        print(f)
+                        # print(f)
                         post_code = f
     return (post_code)
 
