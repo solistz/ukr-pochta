@@ -48,8 +48,6 @@ def region_id_code(reg_id,reg_district_ua):
     return (district_id)
 
 
-
-#
 def city_ua(reg_id_cod,reg_city_ua):
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     https_get = "get_city_by_region_id_and_district_id_and_city_ua"
