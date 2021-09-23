@@ -5,8 +5,7 @@ def main():
 
     test = Region_city('хм', 'хм', 'хм', 'іпод', 'пров.', 2)
     a = test.ukr_pochta_api()
-    print(a)
-
+    # print(a)
 
 if __name__ == "__main__":
     main()
