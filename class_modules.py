@@ -3,7 +3,6 @@ class Region_city:
     https = "https://www.ukrposhta.ua/address-classifier-ws/"
     headers = {'Accept': 'application/json', 'Authorization': 'Bearer 371e26f3-7f69-3972-9b3d-9236d45ad98b'}
     api_params_search = [0,1,2,3,4]
-
     https_get_api = [
         "get_regions_by_region_ua",
         "get_districts_by_region_id_and_district_ua",
@@ -11,6 +10,7 @@ class Region_city:
         "get_street_by_region_id_and_district_id_and_city_id_and_street_ua",
         "get_addr_house_by_street_id",
     ]
+    street_lane = 'SHORTSTREETTYPE_UA'
 
     def __init__(self, region_name, district_ua, city_ua, street_ua, shortstreettype_ua, housenumber):
         self.region_name = region_name
@@ -19,6 +19,15 @@ class Region_city:
         self.street_ua = street_ua
         self.shortstreettype_ua = shortstreettype_ua
         self.housenumber = housenumber
+
+    def ukr_pochta_api(self):
+        for i in range(len(self.https_get_api)):
+            respomse_api = requests.get(self.https + self.https_get_api[i], headers=self.headers, params=self.params_def(i))
+            print(respomse_api.json())
+            zm = respomse_api.json()
+            self.api_params_search[i] = self.dvizok(zm,self.search_api(i))
+            print('xxxxx' , self.api_params_search)
+
 
     def search_api(self, numb):
         search_api_text = [
@@ -30,7 +39,6 @@ class Region_city:
         ]
         return search_api_text[numb]
 
-
     def params_def(self,numb):
         params_def_tup = [
             (('region_name', self.region_name),),
@@ -41,21 +49,19 @@ class Region_city:
         ]
         return params_def_tup[numb]
 
+
     def dvizok(self, zm1, zm2):
         for a, b in zm1.items():
             for c, d in b.items():
                 for i in d:
                     for e, f in i.items():
+                        if e == self.street_lane and f == self.shortstreettype_ua:
+                            for g, h in i.items():
+                                if g == zm2:
+                                    print(zm2)
+                                    z = h
+                            return (z)
                         if e == zm2:
                             z = f
                             print('oooPs!',z)
         return (z)
-
-
-    def ukr_pochta_api(self):
-        for i in range(len(self.https_get_api)):
-            respomse_api = requests.get(self.https + self.https_get_api[i], headers=self.headers, params=self.params_def(i))
-            print(respomse_api.json())
-            zm = respomse_api.json()
-            self.api_params_search[i] = self.dvizok(zm,self.search_api(i))
-            print('xxxxx' , self.api_params_search)
